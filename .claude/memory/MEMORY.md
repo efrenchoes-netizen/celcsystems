@@ -1,0 +1,1 @@
+- [Language preference](language-preference.md) — User prefers responses in Spanish

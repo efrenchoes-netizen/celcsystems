@@ -49,7 +49,7 @@ export default function Contact() {
           <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="space-y-6">
             {[
               { icon: <Mail size={20} />, label: 'Email', value: 'info@celcsystems.com' },
-              { icon: <Phone size={20} />, label: 'WhatsApp', value: '+1 (516) 555-0000' },
+              { icon: <Phone size={20} />, label: 'WhatsApp', value: '+1 (516) 800-7626' },
               { icon: <MapPin size={20} />, label: 'Location', value: 'Massapequa, NY' },
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-xl">

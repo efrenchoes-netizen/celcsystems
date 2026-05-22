@@ -6,10 +6,10 @@ import { Monitor, Zap, Shield, Headphones, ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 
 const serviceImages = {
-  repair: 'https://images.unsplash.com/photo-1591799264318-7e6f9b8365b6?q=80&w=800&auto=format&fit=crop',
+  repair: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=800&auto=format&fit=crop',
   automation: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop',
-  maintenance: 'https://images.unsplash.com/photo-1558494949-ef526b0042a0?q=80&w=800&auto=format&fit=crop',
-  remote: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=800&auto=format&fit=crop',
+  maintenance: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800&auto=format&fit=crop',
+  remote: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=800&auto=format&fit=crop',
 };
 
 const servicesData = {

@@ -2,21 +2,49 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, CheckCircle, Loader2, Mail, Phone, MapPin, Clock } from 'lucide-react';
+import { Send, CheckCircle, XCircle, Loader2, Mail, Phone, MapPin, Clock } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 
 export default function Contact() {
   const { language } = useLanguage();
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '', service: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setStatus('success');
-    setForm({ name: '', email: '', phone: '', message: '', service: '' });
+
+    try {
+      const response = await fetch('https://n8n.celcsystems.com/webhook/celc-contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          message: form.message,
+          service: form.service,
+          language: language
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setStatus('success');
+        setForm({ name: '', email: '', phone: '', message: '', service: '' });
+        setErrorMessage('');
+      } else {
+        setStatus('error');
+        setErrorMessage(data.message || (language === 'es' ? 'Error al enviar el mensaje' : 'Error sending message'));
+      }
+    } catch (error) {
+      setStatus('error');
+      setErrorMessage(language === 'es' ? 'Error de conexión. Intenta de nuevo.' : 'Connection error. Please try again.');
+    }
   };
 
   const services = language === 'es'
@@ -134,6 +162,26 @@ export default function Contact() {
                     className="mt-4 px-6 py-3 text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
                   >
                     {language === 'es' ? 'Enviar otro mensaje' : 'Send another message'}
+                  </button>
+                </div>
+              ) : status === 'error' ? (
+                <div className="flex flex-col items-center justify-center py-12 gap-4">
+                  <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center">
+                    <XCircle className="w-8 h-8 text-red-400" />
+                  </div>
+                  <p className="text-2xl font-bold text-white">
+                    {language === 'es' ? 'Error al enviar' : 'Error sending'}
+                  </p>
+                  <p className="text-slate-400 text-center">
+                    {errorMessage || (language === 'es'
+                      ? 'Hubo un problema al enviar tu mensaje. Intenta de nuevo.'
+                      : 'There was a problem sending your message. Please try again.')}
+                  </p>
+                  <button
+                    onClick={() => setStatus('idle')}
+                    className="mt-4 px-6 py-3 text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
+                  >
+                    {language === 'es' ? 'Intentar de nuevo' : 'Try again'}
                   </button>
                 </div>
               ) : (

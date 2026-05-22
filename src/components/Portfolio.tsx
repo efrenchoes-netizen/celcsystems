@@ -26,7 +26,7 @@ const portfolioData = {
       id: 3,
       title: 'Red Empresarial Segura',
       description: 'Diseño e implementación de red empresarial con firewall, VPN y monitoreo 24/7.',
-      image: 'https://images.unsplash.com/photo-1558494949-ef526b0969b0?q=80&w=1000&auto=format&fit=crop',
+      image: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?q=80&w=1000&auto=format&fit=crop',
       technologies: ['Cisco', 'pfSense', 'Zabbix', 'WireGuard'],
       category: 'Infraestructura'
     },
@@ -60,7 +60,7 @@ const portfolioData = {
       id: 3,
       title: 'Secure Business Network',
       description: 'Design and implementation of business network with firewall, VPN and 24/7 monitoring.',
-      image: 'https://images.unsplash.com/photo-1558494949-ef526b0969b0?q=80&w=1000&auto=format&fit=crop',
+      image: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?q=80&w=1000&auto=format&fit=crop',
       technologies: ['Cisco', 'pfSense', 'Zabbix', 'WireGuard'],
       category: 'Infrastructure'
     },

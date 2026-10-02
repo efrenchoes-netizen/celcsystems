@@ -36,6 +36,7 @@ jobs:
           path: ./.next
           if-no-files-found: error
           retention-days: 1
+          include-hidden-files: true
 
       - name: Upload public assets
         uses: actions/upload-artifact@v4
@@ -44,3 +45,4 @@ jobs:
           path: ./public
           if-no-files-found: error
           retention-days: 1
+          include-hidden-files: true

@@ -6,11 +6,12 @@ import { useLanguage } from '@/lib/LanguageContext';
 
 export default function Hero() {
   const { t } = useLanguage();
-  const [text, setText] = useState('');
+  const words = t.hero?.words || ['Negocios', 'Empresas', 'PCs', 'Tu Negocio'];
+  // Estado inicial = primera palabra visible para SSR (SEO)
+  const [text, setText] = useState(words[0]);
   const [wordIndex, setWordIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
-  const words = t.hero?.words || ['Negocios', 'Empresas', 'PCs', 'Tu Negocio'];
 
   useEffect(() => {
     const currentWord = words[wordIndex];
@@ -59,8 +60,8 @@ export default function Hero() {
               </motion.div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white leading-tight mb-4">
-                {t.hero?.title || 'Soluciones IT para'}<br />
-                <span className="text-blue-600 dark:text-blue-400 min-h-[1.2em] inline-block">
+                Reparación de PC y Automatización IT<br />
+                para <span className="text-blue-600 dark:text-blue-400 min-h-[1.2em] inline-block">
                   {text}<span className="animate-pulse">|</span>
                 </span>
               </h1>

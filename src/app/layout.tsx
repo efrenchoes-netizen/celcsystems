@@ -14,11 +14,7 @@ export const metadata: Metadata = {
   publisher: 'CELC Systems',
   metadataBase: new URL('https://celcsystems.com'),
   alternates: {
-    canonical: '/',
-    languages: {
-      'es': '/es',
-      'en': '/en'
-    }
+    canonical: 'https://celcsystems.com'
   },
   openGraph: {
     title: 'CELC Systems | Soluciones IT para tu Negocio',
@@ -74,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               name: 'CELC Systems',
               description: 'Reparación de PC, automatización con IA y mantenimiento mensual para pequeñas empresas en NYC y Long Island.',
               url: 'https://celcsystems.com',
-              telephone: '+1-929-XXX-XXXX',
+              telephone: '+1-516-800-7626',
               email: 'info@celcsystems.com',
               priceRange: '$79 - $350',
               areaServed: {

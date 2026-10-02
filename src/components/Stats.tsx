@@ -6,26 +6,21 @@ import { useLanguage } from '@/lib/LanguageContext';
 
 export default function Stats() {
   const { t } = useLanguage();
-  const [stats, setStats] = useState({
-    clients: 0,
-    pcs: 0,
-    satisfaction: 0,
-    years: 0
-  });
+  // Valores finales para SSR/SEO; la animación es decorativa
+  const finalStats = {
+    clients: 50,
+    pcs: 200,
+    satisfaction: 99,
+    years: 5
+  };
+
+  const [stats, setStats] = useState(finalStats);
 
   useEffect(() => {
-    // Animate numbers when component mounts
-    const animateNumbers = () => {
-      setStats({
-        clients: 50,
-        pcs: 200,
-        satisfaction: 99,
-        years: 5
-      });
-    };
-
-    // Add a small delay to ensure proper mounting
-    const timer = setTimeout(animateNumbers, 100);
+    // Animación decorativa: asegura que el número final se mantenga visible
+    const timer = setTimeout(() => {
+      setStats(finalStats);
+    }, 100);
     return () => clearTimeout(timer);
   }, []);
 

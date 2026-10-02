@@ -12,7 +12,7 @@ interface CounterProps {
 }
 
 function Counter({ target, suffix = '', duration = 2000 }: CounterProps) {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(target);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 

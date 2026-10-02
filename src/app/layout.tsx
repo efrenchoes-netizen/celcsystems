@@ -47,12 +47,7 @@ export const metadata: Metadata = {
   publisher: 'CELC Systems',
   metadataBase: new URL('https://celcsystems.com'),
   alternates: {
-    canonical: '/',
-    languages: {
-      'es-US': '/es',
-      'en-US': '/en',
-      'x-default': '/'
-    }
+    canonical: 'https://celcsystems.com'
   },
   openGraph: {
     title: 'CELC Systems | Reparación de PC y Automatización IA en NYC',
@@ -256,7 +251,7 @@ export default function RootLayout({
                 target: 'https://celcsystems.com/search?q={search_term_string}',
                 'query-input': 'required name=search_term_string'
               },
-              inLanguage: ['es', 'en']
+              inLanguage: ['es']
             })
           }}
         />

@@ -23,7 +23,7 @@ const services = {
 export default function Hero() {
   const { t, language } = useLanguage();
   const [currentService, setCurrentService] = useState(0);
-  const [displayText, setDisplayText] = useState('');
+  const [displayText, setDisplayText] = useState(currentServices[0]);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const currentServices = services[language as keyof typeof services] || services.es;
@@ -132,15 +132,15 @@ export default function Hero() {
               className="space-y-4"
             >
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight">
-                <span className="text-white">
-                  {language === 'es' ? 'Tu Negocio' : 'Your Business'}
-                </span>
-                <br />
-                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-orange-400 bg-clip-text text-transparent min-h-[1.2em] inline-block">
-                  {displayText}
-                  <span className="animate-pulse">|</span>
-                </span>
-              </h1>
+              <span className="text-white">Reparación de PC</span>
+              <br />
+              <span className="text-white">y Automatización IT</span>
+              <br />
+              <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-orange-400 bg-clip-text text-transparent min-h-[1.2em] inline-block">
+                {displayText}
+                <span className="animate-pulse">|</span>
+              </span>
+            </h1>
 
               <p className="text-xl text-slate-300 max-w-xl leading-relaxed">
                 {language === 'es'

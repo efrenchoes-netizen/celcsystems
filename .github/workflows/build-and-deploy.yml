@@ -26,14 +26,21 @@ jobs:
         env:
           NODE_OPTIONS: --max-old-space-size=6144
 
+      - name: Verify build output
+        run: ls -la .next/server/app/ && find .next/server/app -maxdepth 2 -type f | head -20
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: next-build
-          path: |
-            .next
-            public
-            package*.json
-            node_modules
-            next.config.ts
+          path: .next
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Upload public assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-assets
+          path: public
+          if-no-files-found: error
           retention-days: 1

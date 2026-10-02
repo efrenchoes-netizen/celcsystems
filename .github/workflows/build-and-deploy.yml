@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: next-build
-          path: .next
+          path: ./.next
           if-no-files-found: error
           retention-days: 1
 
@@ -41,6 +41,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: public-assets
-          path: public
+          path: ./public
           if-no-files-found: error
           retention-days: 1

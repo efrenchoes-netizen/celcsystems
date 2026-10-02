@@ -1,158 +1,206 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { MessageSquare, X, Send, Bot, User, Loader2 } from 'lucide-react';
-import { GoogleGenAI } from '@google/genai';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MessageSquare, X, Send, Bot, User } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 
-const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY || '' });
-
 interface Message {
-  role: 'user' | 'model';
+  role: 'user' | 'assistant';
   content: string;
 }
 
 const quickReplies = {
-  es: ['¿Cuánto cuesta la reparación de PC?', '¿Qué incluye el mantenimiento mensual?', '¿Cómo funciona la automatización?', '¿Cómo los contacto?'],
-  en: ['How much does PC repair cost?', 'What does monthly maintenance include?', 'How does automation work?', 'How can I contact you?'],
+  es: ['¿Cuánto cuesta reparar una PC?', '¿Qué incluye el mantenimiento?', '¿Cómo funciona n8n?', '¿Atienden en Long Island?'],
+  en: ['How much is PC repair?', 'What does maintenance include?', 'How does n8n work?', 'Do you serve Long Island?']
 };
 
-const faqAnswers: Record<string, { es: string; en: string }> = {
-  precio_reparacion: {
-    es: '💻 La reparación de PC tiene un costo de **$79–$99 USD** dependiendo del tipo de problema. Incluye diagnóstico, limpieza y solución del problema.',
-    en: '💻 PC repair costs **$79–$99 USD** depending on the issue. Includes diagnosis, cleaning, and problem resolution.',
+const initialMessages = {
+  es: '¡Hola! 👋 Soy el asistente virtual de CELC Systems. ¿En qué puedo ayudarte hoy?',
+  en: "Hi! 👋 I'm CELC Systems' virtual assistant. How can I help you today?"
+};
+
+const responses: Record<string, { es: string; en: string }> = {
+  precio: {
+    es: '💻 La reparación de PC cuesta entre **$79 y $99 USD**. El diagnóstico es gratuito y todas las reparaciones incluyen garantía de 30 días.',
+    en: '💻 PC repair costs between **$79 and $99 USD**. Diagnosis is free and all repairs include a 30-day warranty.'
   },
   mantenimiento: {
-    es: '🛡️ El **Mantenimiento Mensual** cuesta **$149/mes** e incluye: monitoreo continuo, actualizaciones de seguridad, respaldos automáticos y soporte prioritario.',
-    en: '🛡️ **Monthly Maintenance** costs **$149/mo** and includes: continuous monitoring, security updates, automatic backups, and priority support.',
+    es: '🛡️ El mantenimiento mensual ($149/mes) incluye: monitoreo 24/7, actualizaciones de seguridad, respaldos automáticos y soporte prioritario.',
+    en: '🛡️ Monthly maintenance ($149/mo) includes: 24/7 monitoring, security updates, automatic backups and priority support.'
   },
-  automatizacion: {
-    es: '⚙️ La **Automatización con n8n** tiene un costo de **$350–$500** de configuración más **$199–$249/mes**.',
-    en: '⚙️ **n8n Automation** has a setup cost of **$350–$500** plus **$199–$249/mo**.',
+  n8n: {
+    es: '⚙️ n8n es una plataforma de automatización que conecta tus apps favoritas. Desde $350 configuramos flujos automáticos para emails, formularios, CRM y más.',
+    en: '⚙️ n8n is an automation platform that connects your favorite apps. From $350 we set up automatic workflows for emails, forms, CRM and more.'
   },
-  contacto: {
-    es: '📞 Puedes contactarnos por **WhatsApp** o usando el formulario de Contacto en esta página. ¡Respondemos en menos de 24 horas!',
-    en: '📞 You can reach us via **WhatsApp** or using the Contact form on this page. We respond within 24 hours!',
+  ubicacion: {
+    es: '📍 Servimos todo NYC (Queens, Brooklyn, Bronx, Manhattan) y Long Island (Nassau y Suffolk County). Ofrecemos servicio a domicilio.',
+    en: '📍 We serve all NYC (Queens, Brooklyn, Bronx, Manhattan) and Long Island (Nassau and Suffolk County). We offer on-site service.'
   },
+  default: {
+    es: 'Gracias por tu mensaje. Para darte la mejor asistencia, te sugiero contactarnos directamente por WhatsApp o usando el formulario de contacto.',
+    en: 'Thank you for your message. To provide you with the best assistance, I suggest contacting us directly via WhatsApp or using the contact form.'
+  }
 };
 
-function getFaqAnswer(msg: string, lang: 'es' | 'en'): string | null {
+function getResponse(msg: string, lang: 'es' | 'en'): string {
   const lower = msg.toLowerCase();
-  if (lower.includes('repair') || lower.includes('reparaci') || lower.includes('cuesta') || lower.includes('precio') || lower.includes('pc')) return faqAnswers.precio_reparacion[lang];
-  if (lower.includes('mantenimiento') || lower.includes('maintenance') || lower.includes('mensual') || lower.includes('monthly')) return faqAnswers.mantenimiento[lang];
-  if (lower.includes('automatiz') || lower.includes('automation') || lower.includes('n8n')) return faqAnswers.automatizacion[lang];
-  if (lower.includes('contact') || lower.includes('whatsapp') || lower.includes('llamar')) return faqAnswers.contacto[lang];
-  return null;
+  if (lower.includes('precio') || lower.includes('cost') || lower.includes('cuesta') || lower.includes('repair')) return responses.precio[lang];
+  if (lower.includes('mantenimiento') || lower.includes('maintenance')) return responses.mantenimiento[lang];
+  if (lower.includes('n8n') || lower.includes('automatiza')) return responses.n8n[lang];
+  if (lower.includes('ubicacion') || lower.includes('location') || lower.includes('long island') || lower.includes('area')) return responses.ubicacion[lang];
+  return responses.default[lang];
 }
 
 export default function ChatBot() {
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
   const lang = language as 'es' | 'en';
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([{ role: 'model', content: t.chat.welcome }]);
+  const [messages, setMessages] = useState<Message[]>([
+    { role: 'assistant', content: initialMessages[lang] }
+  ]);
   const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [showQuickReplies, setShowQuickReplies] = useState(true);
+  const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages]);
 
+  useEffect(() => {
+    // Update initial message when language changes
+    if (messages.length === 1) {
+      setMessages([{ role: 'assistant', content: initialMessages[lang] }]);
+    }
+  }, [lang]);
+
   const handleSend = async (messageOverride?: string) => {
     const userMessage = (messageOverride || input).trim();
-    if (!userMessage || isLoading) return;
+    if (!userMessage || isTyping) return;
 
     setInput('');
-    setShowQuickReplies(false);
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
-    setIsLoading(true);
+    setIsTyping(true);
 
-    const faqAnswer = getFaqAnswer(userMessage, lang);
-    if (faqAnswer) {
-      setTimeout(() => {
-        setMessages(prev => [...prev, { role: 'model', content: faqAnswer }]);
-        setIsLoading(false);
-      }, 500);
-      return;
-    }
+    // Simulate typing delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-    try {
-      const systemInstruction = `You are the CELC Systems Assistant. You help small Hispanic businesses in NYC and Long Island.
-Services: PC Repair $79–$99, n8n Automation $350–$500 setup + $199–$249/mo, Monthly Maintenance $149/mo, Remote Help $40/hr.
-Contact: WhatsApp or contact form. Response within 24 hours.
-Answer in ${lang === 'es' ? 'Spanish' : 'English'}.`;
-
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash',
-        contents: [
-          ...messages.map(m => ({ role: m.role, parts: [{ text: m.content }] })),
-          { role: 'user', parts: [{ text: userMessage }] },
-        ],
-        config: { systemInstruction },
-      });
-
-      if (!response.text) throw new Error('Empty response');
-      setMessages(prev => [...prev, { role: 'model', content: response.text! }]);
-    } catch (error) {
-      const errMsg = lang === 'es' ? 'Lo siento, hubo un error. Contáctanos por WhatsApp. 📞' : 'Sorry, there was an error. Contact us via WhatsApp. 📞';
-      setMessages(prev => [...prev, { role: 'model', content: errMsg }]);
-    } finally {
-      setIsLoading(false);
-    }
+    const response = getResponse(userMessage, lang);
+    setMessages(prev => [...prev, { role: 'assistant', content: response }]);
+    setIsTyping(false);
   };
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+      {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} transition={{ duration: 0.2 }} className="w-[350px] sm:w-[380px] h-[520px] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200 dark:border-slate-700">
-            <div className="flex items-center justify-between px-4 py-3 bg-blue-600 text-white">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center"><Bot size={18} /></div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.2 }}
+            className="w-[350px] sm:w-[400px] h-[500px] bg-slate-900 rounded-2xl shadow-2xl shadow-black/50 flex flex-col overflow-hidden border border-slate-700"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-cyan-500 to-blue-600">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                  <Bot className="w-5 h-5 text-white" />
+                </div>
                 <div>
-                  <p className="font-semibold text-sm">{t.chat.title}</p>
-                  <div className="flex items-center gap-1">
+                  <p className="font-semibold text-white">CELC Assistant</p>
+                  <div className="flex items-center gap-1.5">
                     <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                    <span className="text-xs text-blue-100">Online</span>
+                    <span className="text-xs text-cyan-100">Online</span>
                   </div>
                 </div>
               </div>
-              <button onClick={() => setIsOpen(false)} className="p-1.5 hover:bg-white/10 rounded-lg transition-colors" aria-label="Close chat"><X size={18} /></button>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-white" />
+              </button>
             </div>
 
-            <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
-              {messages.map((m, i) => (
-                <div key={i} className={`flex gap-2 ${m.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                  <div className={`w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center text-white text-xs ${m.role === 'user' ? 'bg-blue-600' : 'bg-slate-600'}`}>
-                    {m.role === 'user' ? <User size={14} /> : <Bot size={14} />}
+            {/* Messages */}
+            <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+              {messages.map((msg, i) => (
+                <div
+                  key={i}
+                  className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
+                >
+                  <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${
+                    msg.role === 'user' ? 'bg-cyan-500' : 'bg-slate-700'
+                  }`}>
+                    {msg.role === 'user' ? <User className="w-4 h-4 text-white" /> : <Bot className="w-4 h-4 text-cyan-400" />}
                   </div>
-                  <div className={`max-w-[75%] px-3 py-2 rounded-2xl text-sm leading-relaxed ${m.role === 'user' ? 'bg-blue-600 text-white rounded-tr-sm' : 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-sm'}`}
-                    dangerouslySetInnerHTML={{ __html: m.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br/>') }} />
+                  <div className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
+                    msg.role === 'user'
+                      ? 'bg-cyan-500 text-white rounded-tr-sm'
+                      : 'bg-slate-800 text-slate-200 rounded-tl-sm border border-slate-700'
+                  }`}
+                    dangerouslySetInnerHTML={{
+                      __html: msg.content.replace(/\*\*(.*?)\*\*/g, '<strong class="text-cyan-400">$1</strong>')
+                    }}
+                  />
                 </div>
               ))}
-              {isLoading && (
-                <div className="flex gap-2 items-center">
-                  <div className="w-7 h-7 rounded-full bg-slate-600 flex items-center justify-center"><Bot size={14} className="text-white" /></div>
-                  <div className="bg-slate-100 dark:bg-slate-800 px-4 py-2 rounded-2xl"><Loader2 size={16} className="animate-spin text-blue-600" /></div>
+
+              {isTyping && (
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center">
+                    <Bot className="w-4 h-4 text-cyan-400" />
+                  </div>
+                  <div className="bg-slate-800 px-4 py-2.5 rounded-2xl rounded-tl-sm border border-slate-700">
+                    <div className="flex gap-1">
+                      <span className="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <span className="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <span className="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                  </div>
                 </div>
               )}
-              {showQuickReplies && messages.length <= 1 && (
-                <div className="flex flex-col gap-2 mt-2">
-                  <p className="text-xs text-slate-400 text-center">{lang === 'es' ? 'Preguntas frecuentes:' : 'Frequently asked:'}</p>
-                  {quickReplies[lang].map((reply, i) => (
-                    <button key={i} onClick={() => handleSend(reply)} className="text-left text-xs px-3 py-2 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 hover:bg-blue-100 transition-colors border border-blue-200 dark:border-blue-800">{reply}</button>
-                  ))}
+
+              {/* Quick Replies */}
+              {messages.length <= 2 && !isTyping && (
+                <div className="flex flex-col gap-2 mt-4">
+                  <p className="text-xs text-slate-500 text-center">
+                    {lang === 'es' ? 'Preguntas frecuentes:' : 'Quick questions:'}
+                  </p>
+                  <div className="grid grid-cols-1 gap-2">
+                    {quickReplies[lang].map((reply, i) => (
+                      <button
+                        key={i}
+                        onClick={() => handleSend(reply)}
+                        className="text-left text-xs px-4 py-2.5 rounded-xl bg-slate-800/50 text-slate-300 hover:bg-cyan-500/20 hover:text-cyan-400 transition-colors border border-slate-700 hover:border-cyan-500/30"
+                      >
+                        {reply}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
 
-            <div className="p-3 border-t border-slate-200 dark:border-slate-700">
-              <div className="flex gap-2 items-center">
-                <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSend()} placeholder={t.chat.placeholder} className="flex-1 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white text-sm" disabled={isLoading} />
-                <button onClick={() => handleSend()} disabled={!input.trim() || isLoading} className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed" aria-label="Send">
-                  <Send size={16} />
+            {/* Input */}
+            <div className="p-4 border-t border-slate-800 bg-slate-900">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                  placeholder={lang === 'es' ? 'Escribe tu mensaje...' : 'Type your message...'}
+                  className="flex-1 px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 text-sm"
+                />
+                <button
+                  onClick={() => handleSend()}
+                  disabled={!input.trim() || isTyping}
+                  className="w-11 h-11 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl flex items-center justify-center hover:shadow-lg hover:shadow-cyan-500/25 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  <Send className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -160,15 +208,39 @@ Answer in ${lang === 'es' ? 'Spanish' : 'English'}.`;
         )}
       </AnimatePresence>
 
-      <motion.button onClick={() => setIsOpen(!isOpen)} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} className="w-14 h-14 bg-blue-600 text-white rounded-2xl shadow-2xl flex items-center justify-center hover:bg-blue-700 transition-colors relative" aria-label="Open chat">
+      {/* Toggle Button */}
+      <motion.button
+        onClick={() => setIsOpen(!isOpen)}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="w-14 h-14 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-2xl shadow-2xl shadow-cyan-500/30 flex items-center justify-center hover:shadow-cyan-500/50 transition-shadow relative"
+      >
         <AnimatePresence mode="wait">
           {isOpen ? (
-            <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}><X size={22} /></motion.div>
+            <motion.div
+              key="close"
+              initial={{ rotate: -90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: 90, opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              <X className="w-6 h-6" />
+            </motion.div>
           ) : (
-            <motion.div key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}><MessageSquare size={22} /></motion.div>
+            <motion.div
+              key="open"
+              initial={{ rotate: 90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: -90, opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              <MessageSquare className="w-6 h-6" />
+            </motion.div>
           )}
         </AnimatePresence>
-        {!isOpen && <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white animate-pulse" />}
+        {!isOpen && (
+          <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-slate-900 animate-pulse" />
+        )}
       </motion.button>
     </div>
   );

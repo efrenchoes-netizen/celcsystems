@@ -1,171 +1,177 @@
 'use client';
 
-import { FaFacebook, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaWhatsapp, FaLinkedin } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { Mail, Phone, MapPin, ArrowUp } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 
 export default function Footer() {
-  const { t } = useLanguage();
+  const { language } = useLanguage();
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.6 }
+  const footerLinks = {
+    es: {
+      quickLinks: 'Enlaces Rápidos',
+      services: 'Servicios',
+      contact: 'Contacto',
+      followUs: 'Síguenos',
+      rights: 'Todos los derechos reservados.'
     },
+    en: {
+      quickLinks: 'Quick Links',
+      services: 'Services',
+      contact: 'Contact',
+      followUs: 'Follow Us',
+      rights: 'All rights reserved.'
+    }
   };
+
+  const links = footerLinks[language as keyof typeof footerLinks] || footerLinks.es;
 
   return (
-    <footer className="bg-gray-900 text-gray-300 py-12">
-      <motion.div 
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-      >
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-
-          {/* Logo y descripción */}
-          <motion.div variants={itemVariants} className="flex flex-col">
-            <motion.div
-              className="flex items-center mb-4"
-            >
-              <span className="text-xl font-bold text-blue-400 mr-2">
-                CELC Systems
-              </span>
-            </motion.div>
-
-            <motion.p
-              variants={itemVariants}
-              className="text-sm max-w-xs"
-            >
-              {t.footer?.description || 'Soluciones tecnológicas integrales para pequeñas empresas en NYC y Long Island. PC repair, automatización IA y mantenimiento mensual.'}
-            </motion.p>
-          </motion.div>
-
-          {/* Enlaces de navegación */}
-          <motion.div variants={itemVariants}>
-            <h3 className="font-semibold text-white mb-4">
-              {t.footer?.quickLinks || 'Enlaces Rápidos'}
-            </h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="/" className="hover:text-white transition-colors duration-200">
-                  {t.nav?.home || 'Inicio'}
-                </a>
-              </li>
-              <li>
-                <a href="/#services" className="hover:text-white transition-colors duration-200">
-                  {t.nav?.services || 'Servicios'}
-                </a>
-              </li>
-              <li>
-                <a href="/#portfolio" className="hover:text-white transition-colors duration-200">
-                  {t.nav?.portfolio || 'Portafolio'}
-                </a>
-              </li>
-              <li>
-                <a href="/#contact" className="hover:text-white transition-colors duration-200">
-                  {t.nav?.contact || 'Contacto'}
-                </a>
-              </li>
-            </ul>
-          </motion.div>
-
-          {/* Servicios */}
-          <motion.div variants={itemVariants}>
-            <h3 className="font-semibold text-white mb-4">
-              {t.footer?.services || 'Nuestros Servicios'}
-            </h3>
-            <ul className="space-y-2">
-              <li>
-                <span className="hover:text-white transition-colors duration-200">
-                  {t.services?.items?.[0]?.title || 'Reparación de PC'}
-                </span>
-              </li>
-              <li>
-                <span className="hover:text-white transition-colors duration-200">
-                  {t.services?.items?.[1]?.title || 'Automatización IA'}
-                </span>
-              </li>
-              <li>
-                <span className="hover:text-white transition-colors duration-200">
-                  {t.services?.items?.[2]?.title || 'Mantenimiento Mensual'}
-                </span>
-              </li>
-              <li>
-                <span className="hover:text-white transition-colors duration-200">
-                  {t.services?.items?.[3]?.title || 'Ayuda Remota'}
-                </span>
-              </li>
-            </ul>
-          </motion.div>
-
-          {/* Redes sociales */}
-          <motion.div variants={itemVariants}>
-            <h3 className="font-semibold text-white mb-4">
-              {t.footer?.social || 'Síguenos'}
-            </h3>
-            <div className="flex space-x-4">
-              <a
-                href="https://facebook.com/celcsystems"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Síguenos en Facebook"
-                className="w-10 h-10 flex items-center justify-center bg-gray-800 hover:bg-blue-600 rounded-full transition-colors duration-200"
-              >
-                <FaFacebook className="text-xl text-gray-300 hover:text-white" />
-              </a>
-              <a
-                href="https://instagram.com/celcsystems"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Síguenos en Instagram"
-                className="w-10 h-10 flex items-center justify-center bg-gray-800 hover:bg-pink-600 rounded-full transition-colors duration-200"
-              >
-                <FaInstagram className="text-xl text-gray-300 hover:text-white" />
-              </a>
-              <a
-                href="https://wa.me/19291234567"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Contactanos por WhatsApp"
-                className="w-10 h-10 flex items-center justify-center bg-gray-800 hover:bg-green-600 rounded-full transition-colors duration-200"
-              >
-                <FaWhatsapp className="text-xl text-gray-300 hover:text-white" />
-              </a>
-            </div>
-            
-            <div className="mt-6">
-              <h4 className="font-medium text-white mb-2 text-sm">{t.footer?.contact || 'Contacto'}</h4>
-              <p className="text-sm text-gray-400">info@celcsystems.com</p>
-              <p className="text-sm text-gray-400">NYC - Long Island</p>
-            </div>
-          </motion.div>
-        </div>
-
-        <div className="mt-12 pt-8 border-t border-gray-800">
-          <motion.p
-            variants={itemVariants}
-            className="text-center text-sm text-gray-500"
+    <footer className="bg-slate-900 border-t border-slate-800">
+      {/* Main Footer */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+          {/* Brand */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="lg:col-span-1"
           >
-            © {new Date().getFullYear()} {t.footer?.copyright || 'CELC Systems. Todos los derechos reservados.'}
-          </motion.p>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
+                C
+              </div>
+              <span className="text-xl font-bold text-white">CELC Systems</span>
+            </div>
+            <p className="text-slate-400 leading-relaxed mb-6">
+              {language === 'es'
+                ? 'Soluciones tecnológicas profesionales para pequeñas empresas en NYC y Long Island.'
+                : 'Professional technology solutions for small businesses in NYC and Long Island.'}
+            </p>
+            <div className="flex gap-3">
+              {[
+                { icon: FaFacebook, href: 'https://facebook.com/celcsystems', color: 'hover:bg-blue-600' },
+                { icon: FaInstagram, href: 'https://instagram.com/celcsystems', color: 'hover:bg-pink-600' },
+                { icon: FaWhatsapp, href: 'https://wa.me/15168007626', color: 'hover:bg-green-600' },
+                { icon: FaLinkedin, href: 'https://linkedin.com/company/celcsystems', color: 'hover:bg-blue-700' },
+              ].map((social, i) => (
+                <a
+                  key={i}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`w-10 h-10 bg-slate-800 ${social.color} rounded-lg flex items-center justify-center text-slate-400 hover:text-white transition-all duration-300`}
+                >
+                  <social.icon className="w-5 h-5" />
+                </a>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Quick Links */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+          >
+            <h3 className="text-white font-semibold mb-6">{links.quickLinks}</h3>
+            <ul className="space-y-3">
+              {[
+                { name: language === 'es' ? 'Inicio' : 'Home', href: '#' },
+                { name: language === 'es' ? 'Servicios' : 'Services', href: '#services' },
+                { name: language === 'es' ? 'Portafolio' : 'Portfolio', href: '#portfolio' },
+                { name: language === 'es' ? 'Precios' : 'Pricing', href: '#pricing' },
+                { name: language === 'es' ? 'Contacto' : 'Contact', href: '#contact' },
+              ].map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-slate-400 hover:text-cyan-400 transition-colors duration-300"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Services */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <h3 className="text-white font-semibold mb-6">{links.services}</h3>
+            <ul className="space-y-3">
+              {[
+                language === 'es' ? 'Reparación de PC' : 'PC Repair',
+                language === 'es' ? 'Automatización IA' : 'AI Automation',
+                language === 'es' ? 'Mantenimiento Mensual' : 'Monthly Maintenance',
+                language === 'es' ? 'Soporte Remoto' : 'Remote Support',
+                language === 'es' ? 'Recuperación de Datos' : 'Data Recovery',
+              ].map((service) => (
+                <li key={service}>
+                  <span className="text-slate-400 hover:text-cyan-400 transition-colors duration-300 cursor-pointer">
+                    {service}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Contact Info */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
+            <h3 className="text-white font-semibold mb-6">{links.contact}</h3>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <Mail className="w-5 h-5 text-cyan-400 mt-0.5" />
+                <span className="text-slate-400">info@celcsystems.com</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Phone className="w-5 h-5 text-cyan-400 mt-0.5" />
+                <span className="text-slate-400">+1 (516) 800-7626</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-cyan-400 mt-0.5" />
+                <span className="text-slate-400">Massapequa, NY<br />NYC & Long Island</span>
+              </li>
+            </ul>
+          </motion.div>
         </div>
-      </motion.div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="border-t border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-slate-500 text-sm">
+              © {new Date().getFullYear()} CELC Systems. {links.rights}
+            </p>
+            <button
+              onClick={scrollToTop}
+              className="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors group"
+            >
+              <span className="text-sm">{language === 'es' ? 'Volver arriba' : 'Back to top'}</span>
+              <div className="w-8 h-8 bg-slate-800 group-hover:bg-cyan-500/20 rounded-lg flex items-center justify-center transition-colors">
+                <ArrowUp className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
     </footer>
   );
 }

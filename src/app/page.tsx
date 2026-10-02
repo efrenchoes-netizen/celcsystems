@@ -1,6 +1,5 @@
 'use client';
 
-import Reel from '@/components/Reel';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Stats from '@/components/Stats';
@@ -11,20 +10,22 @@ import PricingCalculator from '@/components/PricingCalculator';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import ChatBot from '@/components/ChatBot';
+
 export default function Home() {
   return (
-    <main>
-      <Navbar onBlogClick={() => window.open('https://blog.celcsystems.com', '_blank')} />
-      <Hero />
-      <Reel />
-      <Stats />
-      <Services />
-      <Process />
-      <Portfolio />
-      <PricingCalculator />
-      <Contact />
+    <>
+      <Navbar />
+      <main>
+        <Hero />
+        <Stats />
+        <Services />
+        <Process />
+        <Portfolio />
+        <PricingCalculator />
+        <Contact />
+      </main>
       <Footer />
       <ChatBot />
-    </main>
+    </>
   );
 }

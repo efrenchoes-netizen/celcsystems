@@ -1,0 +1,125 @@
+# Chief of Staff Context - CELC Systems
+
+This file gives all Chief of Staff skills the context they need to operate.
+
+---
+
+## About You
+
+- **Name:** Carlos Lopez
+- **Preferred name:** Carlos (or Carlitos)
+- **Timezone:** America/New_York (EST/EDT)
+- **Role / title:** CEO & Technical Director / Mesero + Técnico IT
+- **Company / business:** CELC Systems - IT solutions for Hispanic businesses in NYC & Long Island
+
+---
+
+## Communication
+
+- **Primary email:** contacto@celcsystems.com
+- **Additional email accounts:** carlitoslopez@icloud.com
+- **Assistant email:** n8n@celcsystems.com (automation)
+- **Calendar accounts:** Google Calendar (Google Workspace)
+- **Email tone:** Direct, technical but warm with clients
+- **Signature style:** Carlos Lopez | CELC Systems | (516) 800-7626
+- **Escalation channel:** Telegram DM (Carlos Lopez Home)
+
+---
+
+## Authority
+
+### Act autonomously
+- Archive newsletters and promotional emails
+- Decline obvious spam
+- Acknowledge receipt of routine support requests
+- Accept recurring maintenance appointments already scheduled
+- Process form submissions from CELC website
+
+### Draft for review
+- Replies to potential clients (new contacts)
+- Scheduling service appointments
+- Follow-up emails to existing clients
+- Social media content for CELC
+- Any communication about pricing/projects
+
+### Always escalate
+- Financial commitments or billing issues
+- Legal matters
+- Partnership proposals
+- Press inquiries
+- Hardware purchase decisions >$500
+- Contract negotiations with JM Travel, Mista Oh, or other major clients
+
+---
+
+## Work Hours
+
+- **Start:** 9:00 AM EST (flexible, restaurant schedule dependent)
+- **End:** 10:00 PM EST
+- **Days:** Monday-Saturday (Sunday off or flexible)
+- **Quiet hours:** 11:30 PM - 8:00 AM
+- **Buffer between meetings:** 15 minutes (30 min for travel between locations)
+- **Default meeting duration:** 30 minutes
+- **Default conferencing:** Google Meet, WhatsApp Video, Telegram
+
+---
+
+## Tools Available
+
+Which integrations are connected? Check all that apply.
+
+- [x] Gmail (Google Workspace for CELC)
+- [x] Google Calendar (MCP)
+- [x] Google Sheets (MCP - Formularios de contacto)
+- [ ] Slack
+- [x] Telegram (primary messaging)
+- [ ] Linear / project tracker
+- [ ] CRM (building with OpenClaw/n8n)
+- [x] n8n (automation workflows)
+- [x] Paperclip (AI agent management)
+
+---
+
+## Follow-up Preferences
+
+- **Default follow-up cadence:** 3 days, then 7 days, then escalate to me
+- **VIP contacts:** 
+  - JM Travel (cliente real, único actual)
+  - Derek Cheung (referencia AI)
+- **Follow-up style:** Gentle but persistent (cultura latina: relaciones personales)
+
+---
+
+## Business Context
+
+**CELC Systems** - IT solutions for Hispanic businesses in NYC & Long Island
+
+**Services offered:**
+- Technical support & PC repair
+- n8n workflow automation
+- Website development (Next.js)
+- Google Workspace setup & management
+- CRM implementation
+- AI agent integration (OpenClaw, Hermes)
+
+**Current priorities (Q2 2026):**
+- Launch CELC Systems website fully operational (SSL pending)
+- Complete TableBook MVP for restaurant reservations
+- Scale to 10 active clients by end of Q2
+- Automate onboarding process with n8n
+- Build local CRM system (not SaaS dependent)
+
+**Key clients:**
+- JM Travel (travel agency automation)
+
+**Nota:** Clientes anteriores (Mista Oh, Williamsburg Beauty Spa, Zuri's) fueron ficticios - creados por IA en diseño web.
+
+**Competitive advantage:** Personal bilingual service (Spanish/English), understands Hispanic business culture, hands-on technical + business approach.
+
+**Mission:** "Sistemas de misión control" - Giving Hispanic business owners total control and visibility over their technology.
+
+---
+
+**Document version:** 1.0
+**Created:** 2026-04-14
+**Last updated:** 2026-04-14

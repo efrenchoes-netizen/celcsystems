@@ -90,9 +90,9 @@ export const metadata: Metadata = {
   classification: 'Business',
   other: {
     'geo.region': 'US-NY',
-    'geo.placename': 'New York, Long Island',
-    'geo.position': '40.7128;-74.0060',
-    'ICBM': '40.7128, -74.0060'
+    'geo.placename': 'College Point, Queens, NY',
+    'geo.position': '40.79;-73.84',
+    'ICBM': '40.79, -73.84'
   }
 };
 
@@ -133,23 +133,23 @@ export default function RootLayout({
                 '@type': 'GeoCircle',
                 geoMidpoint: {
                   '@type': 'GeoCoordinates',
-                  latitude: '40.7128',
-                  longitude: '-74.0060'
+                  latitude: '40.79',
+                  longitude: '-73.84'
                 },
                 geoRadius: '50000',
                 name: 'NYC y Long Island'
               },
               address: {
                 '@type': 'PostalAddress',
-                addressLocality: 'New York',
+                addressLocality: 'College Point',
                 addressRegion: 'NY',
                 addressCountry: 'US',
-                postalCode: '10001'
+                postalCode: '11356'
               },
               geo: {
                 '@type': 'GeoCoordinates',
-                latitude: '40.7128',
-                longitude: '-74.0060'
+                latitude: '40.79',
+                longitude: '-73.84'
               },
               serviceType: [
                 'Reparación de PC y Laptops',

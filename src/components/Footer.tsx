@@ -146,7 +146,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-cyan-400 mt-0.5" />
-                <span className="text-slate-400">Massapequa, NY<br />NYC & Long Island</span>
+                <span className="text-slate-400">College Point, Queens, NY<br />NYC & Long Island</span>
               </li>
             </ul>
           </motion.div>

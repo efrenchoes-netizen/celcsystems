@@ -1,0 +1,32 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#FFF7ED"/>
+  
+  <!-- Header -->
+  <rect width="1200" height="120" fill="#F97316"/>
+  <text x="80" y="90" fill="#FFFFFF" font-family="Arial" font-size="72" font-weight="bold">CELC</text>
+  
+  <!-- Card -->
+  <rect x="60" y="180" width="1080" height="310" rx="20" fill="#FFFFFF" stroke="#EA580C" stroke-width="4"/>
+  
+  <!-- Title -->
+  <text x="100" y="260" fill="#1F2937" font-family="Arial" font-size="48" font-weight="bold">Soluciones IT para Negocios Hispanos</text>
+  
+  <!-- Subtitle -->
+  <text x="100" y="310" fill="#6B7280" font-family="Arial" font-size="32">NYC • Long Island • New Jersey</text>
+  
+  <!-- Services -->
+  <text x="100" y="360" fill="#1F2937" font-family="Arial" font-size="26">• Reparacion de PC y laptops</text>
+  <text x="100" y="405" fill="#1F2937" font-family="Arial" font-size="26">• Automatizacion n8n</text>
+  <text x="100" y="450" fill="#1F2937" font-family="Arial" font-size="26">• Soporte tecnico</text>
+  <text x="100" y="495" fill="#1F2937" font-family="Arial" font-size="26">• Desarrollo web</text>
+  
+  <!-- CTA Button -->
+  <rect x="100" y="520" width="300" height="50" rx="10" fill="#F97316"/>
+  <text x="130" y="553" fill="#FFFFFF" font-family="Arial" font-size="24" font-weight="bold">celcsystems.com</text>
+  
+  <!-- Footer -->
+  <rect x="0" y="550" width="1200" height="80" fill="#EA580C"/>
+  
+  <text x="350" y="595" fill="#FFFFFF" font-family="Arial" font-size="22">info@celcsystems.com  |  (516) 800-7626</text>
+</svg>

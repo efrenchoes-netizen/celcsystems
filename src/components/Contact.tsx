@@ -54,7 +54,7 @@ export default function Contact() {
   const contactInfo = [
     { icon: Mail, label: language === 'es' ? 'Email' : 'Email', value: 'info@celcsystems.com', href: 'mailto:info@celcsystems.com' },
     { icon: Phone, label: 'WhatsApp', value: '+1 (516) 800-7626', href: 'https://wa.me/15168007626' },
-    { icon: MapPin, label: language === 'es' ? 'Ubicación' : 'Location', value: 'Massapequa, NY', href: '#' },
+    { icon: MapPin, label: language === 'es' ? 'Ubicación' : 'Location', value: 'College Point, Queens, NY', href: '#' },
     { icon: Clock, label: language === 'es' ? 'Horario' : 'Hours', value: language === 'es' ? 'Lun-Vie: 9AM-6PM' : 'Mon-Fri: 9AM-6PM', href: '#' },
   ];
 

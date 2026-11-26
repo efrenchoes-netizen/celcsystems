@@ -67,10 +67,8 @@ jobs:
           path: ./public
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: celcsystems
-          directory: .next/server/app
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy .next/server/app --project-name=celcsystems
